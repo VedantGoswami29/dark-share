@@ -105,7 +105,7 @@
             </div>
             
             <!-- Back Navigation -->
-            <% if (currentPath !== '/') { %>
+            <% if (currentPath !== '/' && parentPath) { %>
                 <div class="px-6 py-3 border-b border-gray-200 bg-gray-25">
                     <a href="<%= parentPath %>" class="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,11 +124,55 @@
                         <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-3 flex-1 min-w-0">
+                                <% 
+                                // Get file extension for mobile view icons
+                                const mobileExt = file.name.split('.').pop().toLowerCase();
+                                %>
                                     <% if (file.isDirectory) { %>
                                         <svg class="w-6 h-6 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                                         </svg>
+                                    <% } else if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(mobileExt)) { %>
+                                        <!-- Image thumbnail for mobile -->
+                                        <img src="/files<%= currentPath === '/' ? '' : currentPath %>/<%= file.name %>" 
+                                             alt="<%= file.name %>" 
+                                             class="w-6 h-6 object-cover rounded border"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                        <svg class="w-6 h-6 text-green-600 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    <% } else if (['mp4', 'avi', 'mov', 'mkv', 'webm', 'flv'].includes(mobileExt)) { %>
+                                        <!-- Video icon -->
+                                        <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8,5.14V19.14L19,12.14L8,5.14Z" />
+                                        </svg>
+                                    <% } else if (mobileExt === 'pdf') { %>
+                                        <!-- PDF icon -->
+                                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                        </svg>
+                                    <% } else if (['doc', 'docx'].includes(mobileExt)) { %>
+                                        <!-- Word icon -->
+                                        <svg class="w-6 h-6 text-blue-700" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                        </svg>
+                                    <% } else if (['xls', 'xlsx'].includes(mobileExt)) { %>
+                                        <!-- Excel icon -->
+                                        <svg class="w-6 h-6 text-green-700" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                        </svg>
+                                    <% } else if (['mp3', 'wav', 'flac', 'aac', 'ogg'].includes(mobileExt)) { %>
+                                        <!-- Audio icon -->
+                                        <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12,3V13.55C11.41,13.21 10.73,13 10,13A3,3 0 0,0 7,16A3,3 0 0,0 10,19A3,3 0 0,0 13,16V7H17V4H12Z"/>
+                                        </svg>
+                                    <% } else if (mobileExt === 'py') { %>
+                                        <!-- Python icon -->
+                                        <svg class="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M19.14,7.5A2.86,2.86 0 0,1 22,10.36V14.14A2.86,2.86 0 0,1 19.14,17H12C12,17.39 12.06,17.76 12.19,18.1H16V19H8V18.1C8.94,17.76 9,17.39 9,17H4.86A2.86,2.86 0 0,1 2,14.14V10.36A2.86,2.86 0 0,1 4.86,7.5H19.14Z"/>
+                                        </svg>
                                     <% } else { %>
+                                        <!-- Default file icon -->
                                         <svg class="w-6 h-6 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                         </svg>
@@ -136,7 +180,7 @@
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-medium text-gray-900 truncate"><%= file.name %><%= file.isDirectory ? '/' : '' %></p>
                                         <% if (!file.isDirectory && file.size) { %>
-                                            <p class="text-xs text-gray-500"><%= (file.size / 1024).toFixed(1) %> KB</p>
+                                            <p class="text-xs text-gray-500"><%= formatFileSize(file.size) %></p>
                                         <% } %>
                                     </div>
                                 </div>
@@ -164,12 +208,94 @@
                     <% files.forEach(file => { %>
                         <div class="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
                             <div class="p-6">
+                                <% 
+                                // Get file extension for icon selection
+                                const ext = file.name.split('.').pop().toLowerCase();
+                                %>
                                 <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-lg <%= file.isDirectory ? 'bg-blue-100' : 'bg-gray-100' %>">
                                     <% if (file.isDirectory) { %>
                                         <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                                         </svg>
+                                    <% } else if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(ext)) { %>
+                                        <!-- Image thumbnail -->
+                                        <img src="/files<%= currentPath === '/' ? '' : currentPath %>/<%= file.name %>" 
+                                             alt="<%= file.name %>" 
+                                             class="w-12 h-12 object-cover rounded border"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                        <svg class="w-8 h-8 text-green-600 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    <% } else if (['mp4', 'avi', 'mov', 'mkv', 'webm', 'flv'].includes(ext)) { %>
+                                        <!-- Video icon -->
+                                        <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8,5.14V19.14L19,12.14L8,5.14Z" />
+                                        </svg>
+                                    <% } else if (ext === 'pdf') { %>
+                                        <!-- PDF icon -->
+                                        <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                        </svg>
+                                    <% } else if (['doc', 'docx'].includes(ext)) { %>
+                                        <!-- Word icon -->
+                                        <svg class="w-8 h-8 text-blue-700" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                            <path d="M8.5,11H10.5L11.5,15.5L12.5,11H14.5L16,17H14L13.25,13.5L12.25,17H10.75L9.75,13.5L9,17H7.5L8.5,11Z" fill="white"/>
+                                        </svg>
+                                    <% } else if (['xls', 'xlsx'].includes(ext)) { %>
+                                        <!-- Excel icon -->
+                                        <svg class="w-8 h-8 text-green-700" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                            <path d="M8,11H16V13H8V11M8,15H13V17H8V15M8,9H16V11H8V9Z" fill="white"/>
+                                        </svg>
+                                    <% } else if (['ppt', 'pptx'].includes(ext)) { %>
+                                        <!-- PowerPoint icon -->
+                                        <svg class="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                            <path d="M8,11V17H10V15H12C13.1,15 14,14.1 14,13V13C14,11.9 13.1,11 12,11H8M10,13H12V13H10V13Z" fill="white"/>
+                                        </svg>
+                                    <% } else if (ext === 'txt') { %>
+                                        <!-- Text icon -->
+                                        <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    <% } else if (['mp3', 'wav', 'flac', 'aac', 'ogg'].includes(ext)) { %>
+                                        <!-- Audio icon -->
+                                        <svg class="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12,3V13.55C11.41,13.21 10.73,13 10,13A3,3 0 0,0 7,16A3,3 0 0,0 10,19A3,3 0 0,0 13,16V7H17V4H12Z"/>
+                                        </svg>
+                                    <% } else if (ext === 'py') { %>
+                                        <!-- Python icon -->
+                                        <svg class="w-8 h-8 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M19.14,7.5A2.86,2.86 0 0,1 22,10.36V14.14A2.86,2.86 0 0,1 19.14,17H12C12,17.39 12.06,17.76 12.19,18.1H16V19H8V18.1C8.94,17.76 9,17.39 9,17H4.86A2.86,2.86 0 0,1 2,14.14V10.36A2.86,2.86 0 0,1 4.86,7.5H19.14Z"/>
+                                        </svg>
+                                    <% } else if (ext === 'java') { %>
+                                        <!-- Java icon -->
+                                        <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8.851,18.56s-.917.534.653.714c1.902.218,2.874.187,4.969-.211,0,0,.552.346,1.321.646C11.746,21.136,6.977,19,8.851,18.56M8.276,15.933s-1.028.761.542.924c2.032.209,3.636.227,6.413-.308,0,0,.384.389.987.602C10.6,18.239,5.327,16.467,8.276,15.933"/>
+                                        </svg>
+                                    <% } else if (ext === 'html') { %>
+                                        <!-- HTML icon -->
+                                        <svg class="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12,17.56L16.07,16.43L16.62,10.33H9.38L9.2,8.3H16.8L17,6.31H7L7.56,12.32H14.45L14.22,14.9L12,15.5L9.78,14.9L9.64,13.24H7.64L7.93,16.43L12,17.56Z"/>
+                                        </svg>
+                                    <% } else if (ext === 'css') { %>
+                                        <!-- CSS icon -->
+                                        <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M5,3L4.35,6.34H17.94L17.5,8.5H3.92L3.26,11.83H16.85L16.09,15.64L10.61,17.45L5.86,15.64L6.19,14H2.85L2.06,18L9.91,21L18.96,18L20.16,11.97L20.4,10.76L21.94,3H5Z"/>
+                                        </svg>
+                                    <% } else if (['js', 'jsx'].includes(ext)) { %>
+                                        <!-- JavaScript icon -->
+                                        <svg class="w-8 h-8 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M3,3H21V21H3V3M7.73,18.04C8.13,18.89 8.92,19.59 10.27,19.59C11.77,19.59 12.8,18.79 12.8,17.04V11.26H11.1V17C11.1,17.86 10.75,18.08 10.2,18.08C9.62,18.08 9.38,17.68 9.09,17.18L7.73,18.04Z"/>
+                                        </svg>
+                                    <% } else if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) { %>
+                                        <!-- Archive icon -->
+                                        <svg class="w-8 h-8 text-yellow-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14,17H12V15H14M14,13H12V11H14M12,9H14V7H12M12,19H14V17H12M10,7V9H12V7M10,11V13H12V11M10,15V17H12V15M8,17H10V15H8V17Z"/>
+                                        </svg>
                                     <% } else { %>
+                                        <!-- Default file icon -->
                                         <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                         </svg>
@@ -179,7 +305,7 @@
                                     <%= file.name %><%= file.isDirectory ? '/' : '' %>
                                 </h3>
                                 <% if (!file.isDirectory && file.size) { %>
-                                    <p class="text-sm text-gray-500 text-center mb-4"><%= (file.size / 1024).toFixed(1) %> KB</p>
+                                    <p class="text-sm text-gray-500 text-center mb-4"><%= formatFileSize(file.size) %></p>
                                 <% } else { %>
                                     <p class="text-sm text-gray-500 text-center mb-4"><%= file.isDirectory ? 'Folder' : 'File' %></p>
                                 <% } %>
