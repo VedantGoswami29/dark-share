@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom animations and utilities */
+@layer utilities {
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    .animate-slide-up {
+        animation: slideUp 0.3s ease-out;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* File upload drag and drop styling */
+.file-upload-area {
+    transition: all 0.3s ease;
+}
+
+.file-upload-area:hover {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+}
+
+.file-upload-area.drag-over {
+    border-color: #2563eb;
+    background-color: #dbeafe;
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+/* File preview animations */
+.file-preview-enter {
+    animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Progress bar animations */
+.progress-bar-animate {
+    transition: width 0.3s ease-out;
+}
+
+/* Upload success/error message animations */
+.message-enter {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* File thumbnail styles */
+.file-thumbnail {
+    overflow: hidden;
+    position: relative;
+}
+
+.file-thumbnail img {
+    transition: transform 0.3s ease;
+}
+
+.file-thumbnail:hover img {
+    transform: scale(1.1);
+}
+
+/* Loading spinner for thumbnails */
+.thumbnail-loading {
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Custom scrollbar for better UX */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+    .file-card-mobile {
+        padding: 1rem;
+    }
+    
+    .file-grid-mobile {
+        gap: 0.75rem;
+    }
+}
+
+/* Loading spinner customization */
+.loading-spinner {
+    border-top-color: #3b82f6;
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* Focus styles for accessibility */
+.focus-ring:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Custom button hover effects */
+.btn-hover-lift:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* File type icons color customization */
+.file-icon-folder {
+    color: #3b82f6;
+}
+
+.file-icon-document {
+    color: #6b7280;
+}
+
+.file-icon-image {
+    color: #10b981;
+}
+
+.file-icon-video {
+    color: #f59e0b;
+}
+
+.file-icon-audio {
+    color: #8b5cf6;
+}
