@@ -2,21 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Simple animations only */
+/* PERFORMANCE OPTIMIZED - Minimal animations only */
 @layer utilities {
-    .animate-fade-in {
-        animation: fadeIn 0.3s ease-in-out;
+    .no-animation {
+        animation: none !important;
+        transition: none !important;
     }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* File upload drag and drop styling */
+/* File upload drag and drop styling - minimal transitions */
 .file-upload-area {
-    transition: all 0.2s ease;
+    transition: border-color 0.1s ease, background-color 0.1s ease;
 }
 
 .file-upload-area:hover {
@@ -27,34 +23,11 @@
 .file-upload-area.drag-over {
     border-color: #2563eb;
     background-color: #dbeafe;
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
 }
 
-/* Progress bar animations */
+/* Progress bar - minimal animation */
 .progress-bar-animate {
-    transition: width 0.3s ease-out;
-}
-
-/* Upload success/error message animations */
-.message-enter {
-    animation: slideDown 0.2s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* File thumbnail styles */
-.file-thumbnail {
-    overflow: hidden;
-    position: relative;
+    transition: width 0.2s ease-out;
 }
 
 /* Custom scrollbar for better UX */
@@ -81,8 +54,62 @@
     outline-offset: 2px;
 }
 
-/* Remove heavy animations to improve performance */
+/* Search and sort controls */
+.search-highlight {
+    background-color: #fef3c7;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* View toggle buttons */
+.view-toggle-btn {
+    transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+/* File grid optimizations for large lists */
+.file-list {
+    contain: layout style;
+}
+
+.file-item {
+    contain: layout style paint;
+    transition: box-shadow 0.1s ease;
+}
+
+.file-item:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Disable all complex animations for performance */
 * {
-    animation-duration: 0.2s !important;
-    transition-duration: 0.2s !important;
+    animation-duration: 0.1s !important;
+    transition-duration: 0.1s !important;
+}
+
+/* Override any heavy animations */
+.animate-spin {
+    animation-duration: 1s !important;
+}
+
+/* Mobile responsive optimizations */
+@media (max-width: 768px) {
+    .file-item {
+        will-change: auto;
+    }
+}
+
+/* High-performance rendering hints */
+.file-list {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* Lazy loading support */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
 }

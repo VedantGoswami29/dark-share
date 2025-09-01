@@ -32,7 +32,6 @@
             Upload File to: <%= currentPath %>
         </h2>
         
-        <!-- Upload Progress Bar (hidden by default) -->
         <div id="upload-progress" class="hidden mb-4">
             <div class="flex justify-between text-sm text-gray-600 mb-2">
                 <span>Uploading...</span>
@@ -43,27 +42,21 @@
             </div>
         </div>
 
-        <!-- Success/Error Messages -->
         <div id="upload-message" class="hidden mb-4"></div>
 
         <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data" class="space-y-4">
             <input type="hidden" name="currentPath" value="<%= currentPath %>">
             
-            <!-- File Preview Area -->
             <div id="file-preview" class="hidden mb-4 p-4 bg-gray-50 rounded-lg border">
                 <div class="flex items-center space-x-4">
-                    <div id="preview-thumbnail" class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <!-- Preview content will be inserted here -->
-                    </div>
+                    <div id="preview-thumbnail" class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0"></div>
                     <div class="flex-1 min-w-0">
                         <p id="preview-filename" class="text-sm font-medium text-gray-900 truncate"></p>
                         <p id="preview-filesize" class="text-xs text-gray-500"></p>
                         <p id="preview-filetype" class="text-xs text-blue-600"></p>
                     </div>
                     <button type="button" id="remove-file" class="text-red-500 hover:text-red-700 p-1">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
             </div>
@@ -73,9 +66,7 @@
                 <div class="flex items-center justify-center w-full">
                     <label for="file" id="upload-area" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200 file-upload-area">
                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                            </svg>
+                            <svg class="w-8 h-8 mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
                             <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                             <p class="text-xs text-gray-500">Any file type supported</p>
                         </div>
@@ -84,39 +75,40 @@
                 </div>
             </div>
             <button type="submit" id="upload-btn" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed">
-                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                </svg>
+                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
                 Upload File
             </button>
         </form>
     </div>
 
+    <!-- Search and Sort Controls -->
+    <div class="bg-white rounded-lg shadow-md p-4 mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <form action="<%= currentPath %>" method="GET" class="w-full md:w-auto md:flex-1">
+            <div class="relative">
+                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                <input type="text" name="q" id="search" value="<%= searchQuery || '' %>" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Search files and folders...">
+                <% if (sortBy && sortOrder) { %><input type="hidden" name="sortBy" value="<%= sortBy %>"><input type="hidden" name="sortOrder" value="<%= sortOrder %>"><% } %>
+            </div>
+        </form>
+        
+        <div class="flex items-center space-x-2 flex-shrink-0">
+            <span class="text-sm font-medium text-gray-600 hidden sm:block">Sort by:</span>
+            <% const createSortLink = (sortKey) => { const newSortOrder = (sortBy === sortKey && sortOrder === 'asc') ? 'desc' : 'asc'; let href = `${currentPath}?sortBy=${sortKey}&sortOrder=${newSortOrder}`; if (searchQuery) { href += `&q=${encodeURIComponent(searchQuery)}`; } return href; }; %>
+            <a href="<%= createSortLink('name') %>" class="flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 <%= sortBy === 'name' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' %>">Name <% if (sortBy === 'name') { %><svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= sortOrder === 'asc' ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7' %>"></path></svg><% } %></a>
+            <a href="<%= createSortLink('size') %>" class="flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 <%= sortBy === 'size' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' %>">Size <% if (sortBy === 'size') { %><svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= sortOrder === 'asc' ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7' %>"></path></svg><% } %></a>
+            <a href="<%= createSortLink('date') %>" class="flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 <%= sortBy === 'date' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' %>">Date <% if (sortBy === 'date') { %><svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= sortOrder === 'asc' ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7' %>"></path></svg><% } %></a>
+        </div>
+    </div>
+
     <!-- File Listing -->
     <% if (files && files.length > 0) { %>
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
-                <h2 class="text-xl font-semibold text-gray-900 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                    </svg>
-                    Files and Folders
-                </h2>
-            </div>
+            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200"><h2 class="text-xl font-semibold text-gray-900 flex items-center"><svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path></svg>Files and Folders</h2></div>
             
-            <!-- Back Navigation -->
             <% if (currentPath !== '/' && parentPath) { %>
-                <div class="px-6 py-3 border-b border-gray-200 bg-gray-25">
-                    <a href="<%= parentPath %>" class="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                        Back to parent directory
-                    </a>
-                </div>
+                <div class="px-6 py-3 border-b border-gray-200 bg-gray-25"><a href="<%= parentPath %>" class="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"><svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>Back to parent directory</a></div>
             <% } %>
 
-            <!-- File Grid for Desktop, List for Mobile -->
             <div class="p-6">
                 <!-- Mobile/Tablet List View -->
                 <div class="block lg:hidden space-y-3">
@@ -124,78 +116,25 @@
                         <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-3 flex-1 min-w-0">
-                                <% 
-                                // Get file extension for mobile view icons
-                                const mobileExt = file.name.split('.').pop().toLowerCase();
-                                %>
                                     <% if (file.isDirectory) { %>
-                                        <svg class="w-6 h-6 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                                        </svg>
-                                    <% } else if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(mobileExt)) { %>
-                                        <!-- Image thumbnail for mobile -->
-                                        <img src="/files<%= currentPath === '/' ? '' : currentPath %>/<%= file.name %>" 
-                                             alt="<%= file.name %>" 
-                                             class="w-6 h-6 object-cover rounded border"
-                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                        <svg class="w-6 h-6 text-green-600 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                    <% } else if (['mp4', 'avi', 'mov', 'mkv', 'webm', 'flv'].includes(mobileExt)) { %>
-                                        <!-- Video icon -->
-                                        <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M8,5.14V19.14L19,12.14L8,5.14Z" />
-                                        </svg>
-                                    <% } else if (mobileExt === 'pdf') { %>
-                                        <!-- PDF icon -->
-                                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                        </svg>
-                                    <% } else if (['doc', 'docx'].includes(mobileExt)) { %>
-                                        <!-- Word icon -->
-                                        <svg class="w-6 h-6 text-blue-700" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                        </svg>
-                                    <% } else if (['xls', 'xlsx'].includes(mobileExt)) { %>
-                                        <!-- Excel icon -->
-                                        <svg class="w-6 h-6 text-green-700" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                        </svg>
-                                    <% } else if (['mp3', 'wav', 'flac', 'aac', 'ogg'].includes(mobileExt)) { %>
-                                        <!-- Audio icon -->
-                                        <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12,3V13.55C11.41,13.21 10.73,13 10,13A3,3 0 0,0 7,16A3,3 0 0,0 10,19A3,3 0 0,0 13,16V7H17V4H12Z"/>
-                                        </svg>
-                                    <% } else if (mobileExt === 'py') { %>
-                                        <!-- Python icon -->
-                                        <svg class="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M19.14,7.5A2.86,2.86 0 0,1 22,10.36V14.14A2.86,2.86 0 0,1 19.14,17H12C12,17.39 12.06,17.76 12.19,18.1H16V19H8V18.1C8.94,17.76 9,17.39 9,17H4.86A2.86,2.86 0 0,1 2,14.14V10.36A2.86,2.86 0 0,1 4.86,7.5H19.14Z"/>
-                                        </svg>
+                                        <svg class="w-6 h-6 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path></svg>
                                     <% } else { %>
-                                        <!-- Default file icon -->
-                                        <svg class="w-6 h-6 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
+                                        <!-- ===== MODIFIED: Use file-icon partial ===== -->
+                                        <%- include('partials/file-icon', { fileName: file.name, currentPath: currentPath, size: 'small' }) %>
                                     <% } %>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-medium text-gray-900 truncate"><%= file.name %><%= file.isDirectory ? '/' : '' %></p>
-                                        <% if (!file.isDirectory && file.size) { %>
-                                            <p class="text-xs text-gray-500"><%= formatFileSize(file.size) %></p>
-                                        <% } %>
+                                        <div class="text-xs text-gray-500 flex items-center space-x-2">
+                                            <% if (!file.isDirectory && file.size) { %><span><%= formatFileSize(file.size) %></span><span class="text-gray-300">&bull;</span><% } %>
+                                            <% if (file.lastModified) { %><span><%= file.lastModified %></span><% } %>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="flex space-x-2 flex-shrink-0">
-                                    <% if (file.isDirectory) { %>
-                                        <a href="<%= file.path %>" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors duration-200">
-                                            Open
-                                        </a>
+                                    <% if (file.isDirectory) { %><a href="<%= file.path %>" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors duration-200">Open</a>
                                     <% } else { %>
-                                        <a href="/files<%= file.path %>" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors duration-200">
-                                            View
-                                        </a>
-                                        <a href="/download/<%= encodeURIComponent(file.name) %>?path=<%= encodeURIComponent(currentPath) %>" class="bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700 transition-colors duration-200">
-                                            Download
-                                        </a>
+                                        <a href="/files<%= file.path %>" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors duration-200">View</a>
+                                        <a href="/download/<%= encodeURIComponent(file.name) %>?path=<%= encodeURIComponent(currentPath) %>" class="bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700 transition-colors duration-200">Download</a>
                                     <% } %>
                                 </div>
                             </div>
@@ -206,121 +145,28 @@
                 <!-- Desktop Grid View -->
                 <div class="hidden lg:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                     <% files.forEach(file => { %>
-                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
-                            <div class="p-6">
-                                <% 
-                                // Get file extension for icon selection
-                                const ext = file.name.split('.').pop().toLowerCase();
-                                %>
-                                <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-lg <%= file.isDirectory ? 'bg-blue-100' : 'bg-gray-100' %>">
+                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col">
+                            <div class="p-6 flex-grow">
+                                <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-lg <%= file.isDirectory ? 'bg-blue-100' : 'bg-gray-50' %>">
                                     <% if (file.isDirectory) { %>
-                                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                                        </svg>
-                                    <% } else if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(ext)) { %>
-                                        <!-- Image thumbnail -->
-                                        <img src="/files<%= currentPath === '/' ? '' : currentPath %>/<%= file.name %>" 
-                                             alt="<%= file.name %>" 
-                                             class="w-12 h-12 object-cover rounded border"
-                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                        <svg class="w-8 h-8 text-green-600 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                    <% } else if (['mp4', 'avi', 'mov', 'mkv', 'webm', 'flv'].includes(ext)) { %>
-                                        <!-- Video icon -->
-                                        <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M8,5.14V19.14L19,12.14L8,5.14Z" />
-                                        </svg>
-                                    <% } else if (ext === 'pdf') { %>
-                                        <!-- PDF icon -->
-                                        <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                        </svg>
-                                    <% } else if (['doc', 'docx'].includes(ext)) { %>
-                                        <!-- Word icon -->
-                                        <svg class="w-8 h-8 text-blue-700" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                            <path d="M8.5,11H10.5L11.5,15.5L12.5,11H14.5L16,17H14L13.25,13.5L12.25,17H10.75L9.75,13.5L9,17H7.5L8.5,11Z" fill="white"/>
-                                        </svg>
-                                    <% } else if (['xls', 'xlsx'].includes(ext)) { %>
-                                        <!-- Excel icon -->
-                                        <svg class="w-8 h-8 text-green-700" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                            <path d="M8,11H16V13H8V11M8,15H13V17H8V15M8,9H16V11H8V9Z" fill="white"/>
-                                        </svg>
-                                    <% } else if (['ppt', 'pptx'].includes(ext)) { %>
-                                        <!-- PowerPoint icon -->
-                                        <svg class="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                            <path d="M8,11V17H10V15H12C13.1,15 14,14.1 14,13V13C14,11.9 13.1,11 12,11H8M10,13H12V13H10V13Z" fill="white"/>
-                                        </svg>
-                                    <% } else if (ext === 'txt') { %>
-                                        <!-- Text icon -->
-                                        <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                    <% } else if (['mp3', 'wav', 'flac', 'aac', 'ogg'].includes(ext)) { %>
-                                        <!-- Audio icon -->
-                                        <svg class="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12,3V13.55C11.41,13.21 10.73,13 10,13A3,3 0 0,0 7,16A3,3 0 0,0 10,19A3,3 0 0,0 13,16V7H17V4H12Z"/>
-                                        </svg>
-                                    <% } else if (ext === 'py') { %>
-                                        <!-- Python icon -->
-                                        <svg class="w-8 h-8 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M19.14,7.5A2.86,2.86 0 0,1 22,10.36V14.14A2.86,2.86 0 0,1 19.14,17H12C12,17.39 12.06,17.76 12.19,18.1H16V19H8V18.1C8.94,17.76 9,17.39 9,17H4.86A2.86,2.86 0 0,1 2,14.14V10.36A2.86,2.86 0 0,1 4.86,7.5H19.14Z"/>
-                                        </svg>
-                                    <% } else if (ext === 'java') { %>
-                                        <!-- Java icon -->
-                                        <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M8.851,18.56s-.917.534.653.714c1.902.218,2.874.187,4.969-.211,0,0,.552.346,1.321.646C11.746,21.136,6.977,19,8.851,18.56M8.276,15.933s-1.028.761.542.924c2.032.209,3.636.227,6.413-.308,0,0,.384.389.987.602C10.6,18.239,5.327,16.467,8.276,15.933"/>
-                                        </svg>
-                                    <% } else if (ext === 'html') { %>
-                                        <!-- HTML icon -->
-                                        <svg class="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12,17.56L16.07,16.43L16.62,10.33H9.38L9.2,8.3H16.8L17,6.31H7L7.56,12.32H14.45L14.22,14.9L12,15.5L9.78,14.9L9.64,13.24H7.64L7.93,16.43L12,17.56Z"/>
-                                        </svg>
-                                    <% } else if (ext === 'css') { %>
-                                        <!-- CSS icon -->
-                                        <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M5,3L4.35,6.34H17.94L17.5,8.5H3.92L3.26,11.83H16.85L16.09,15.64L10.61,17.45L5.86,15.64L6.19,14H2.85L2.06,18L9.91,21L18.96,18L20.16,11.97L20.4,10.76L21.94,3H5Z"/>
-                                        </svg>
-                                    <% } else if (['js', 'jsx'].includes(ext)) { %>
-                                        <!-- JavaScript icon -->
-                                        <svg class="w-8 h-8 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M3,3H21V21H3V3M7.73,18.04C8.13,18.89 8.92,19.59 10.27,19.59C11.77,19.59 12.8,18.79 12.8,17.04V11.26H11.1V17C11.1,17.86 10.75,18.08 10.2,18.08C9.62,18.08 9.38,17.68 9.09,17.18L7.73,18.04Z"/>
-                                        </svg>
-                                    <% } else if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) { %>
-                                        <!-- Archive icon -->
-                                        <svg class="w-8 h-8 text-yellow-600" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M14,17H12V15H14M14,13H12V11H14M12,9H14V7H12M12,19H14V17H12M10,7V9H12V7M10,11V13H12V11M10,15V17H12V15M8,17H10V15H8V17Z"/>
-                                        </svg>
+                                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path></svg>
                                     <% } else { %>
-                                        <!-- Default file icon -->
-                                        <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
+                                        <!-- ===== MODIFIED: Use file-icon partial ===== -->
+                                        <%- include('partials/file-icon', { fileName: file.name, currentPath: currentPath, size: 'large' }) %>
                                     <% } %>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900 text-center mb-2 truncate" title="<%= file.name %>">
-                                    <%= file.name %><%= file.isDirectory ? '/' : '' %>
-                                </h3>
-                                <% if (!file.isDirectory && file.size) { %>
-                                    <p class="text-sm text-gray-500 text-center mb-4"><%= formatFileSize(file.size) %></p>
-                                <% } else { %>
-                                    <p class="text-sm text-gray-500 text-center mb-4"><%= file.isDirectory ? 'Folder' : 'File' %></p>
-                                <% } %>
+                                <h3 class="text-lg font-medium text-gray-900 text-center mb-2 truncate" title="<%= file.name %>"><%= file.name %><%= file.isDirectory ? '/' : '' %></h3>
+                                <div class="text-sm text-gray-500 text-center mb-4 space-y-1">
+                                    <% if (file.isDirectory) { %><p>Folder</p><% } else if (file.size) { %><p><%= formatFileSize(file.size) %></p><% } %>
+                                    <% if (file.lastModified) { %><p><%= file.lastModified %></p><% } %>
+                                </div>
+                            </div>
+                             <div class="p-4 bg-gray-50 border-t border-gray-100 mt-auto">
                                 <div class="space-y-2">
-                                    <% if (file.isDirectory) { %>
-                                        <a href="<%= file.path %>" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-center block font-medium">
-                                            Open Folder
-                                        </a>
+                                    <% if (file.isDirectory) { %><a href="<%= file.path %>" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-center block font-medium">Open Folder</a>
                                     <% } else { %>
-                                        <a href="/files<%= file.path %>" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-center block font-medium">
-                                            View File
-                                        </a>
-                                        <a href="/download/<%= encodeURIComponent(file.name) %>?path=<%= encodeURIComponent(currentPath) %>" class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-center block font-medium">
-                                            Download
-                                        </a>
+                                        <a href="/files<%= file.path %>" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-center block font-medium">View File</a>
+                                        <a href="/download/<%= encodeURIComponent(file.name) %>?path=<%= encodeURIComponent(currentPath) %>" class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-center block font-medium">Download</a>
                                     <% } %>
                                 </div>
                             </div>
@@ -330,13 +176,20 @@
             </div>
         </div>
     <% } else if (!error) { %>
-        <!-- Empty Directory -->
+        <!-- Empty Directory or No Search Results -->
         <div class="bg-white rounded-lg shadow-md p-12 text-center">
             <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                <% if (searchQuery) { %><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                <% } else { %><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path><% } %>
             </svg>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">This directory is empty</h3>
-            <p class="text-gray-500 mb-6">Upload your first file to get started</p>
+            <% if (searchQuery) { %>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No results found</h3>
+                <p class="text-gray-500 mb-6">Your search for "<%= searchQuery %>" did not match any files or folders.</p>
+                <a href="<%= currentPath %>" class="text-blue-600 hover:underline">Clear search</a>
+            <% } else { %>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">This directory is empty</h3>
+                <p class="text-gray-500 mb-6">Upload your first file to get started</p>
+            <% } %>
         </div>
     <% } %>
 </div>

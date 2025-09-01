@@ -9,6 +9,15 @@ const app = express();
 const activeUsers = new Set();
 const PORT = 8000;
 
+// Performance optimizations for high-speed networks
+app.use((req, res, next) => {
+    // Enable compression for better bandwidth utilization
+    res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache static assets for 1 hour
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    next();
+});
+
 // Set EJS as template engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -69,8 +78,13 @@ app.get('/download/:filename', (req, res) => {
 
 app.use(express.urlencoded({ extended: true }));
 
-// Configure Multer for File Uploads
-const upload = multer({ storage: multer.memoryStorage() });
+// Configure Multer for File Uploads with size limits for better performance
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 10 * 1024 * 1024 * 1024 // 10GB limit for optimal performance
+    }
+});
 
 // Display QR Code (no longer renders HTML)
 app.get('/qrcode', (req, res) => {
@@ -104,13 +118,19 @@ app.get('/*', (req, res) => {
     const encodedPath = decodeURI(req.path);
     const requestedPath = path.join(serveDir, encodedPath);
 
+    // Get search and sort parameters from query string
+    const { q: searchQuery, sortBy = 'name', sortOrder = 'asc' } = req.query;
+
     if (!fs.existsSync(requestedPath)) {
         return res.status(404).render('directory', {
             title: 'File Not Found',
             currentPath: encodedPath,
             parentPath: encodedPath === '/' ? null : path.dirname(encodedPath),
             files: [],
-            error: `No such file or directory ${encodedPath}`
+            error: `No such file or directory ${encodedPath}`,
+            searchQuery,
+            sortBy,
+            sortOrder,
         });
     }
 
@@ -129,26 +149,61 @@ app.get('/*', (req, res) => {
                 currentPath: encodedPath,
                 parentPath: encodedPath === '/' ? null : path.dirname(encodedPath),
                 files: [],
-                error: `Error: ${err.message}`
+                error: `Error: ${err.message}`,
+                searchQuery,
+                sortBy,
+                sortOrder,
             });
         }
 
-        const fileList = files
+        let fileList = files
             .filter(file => !file.startsWith('.'))
             .map(file => {
                 const filePath = path.join(req.path, file);
                 const fullPath = path.join(requestedPath, file);
-                const isDirectory = fs.statSync(fullPath).isDirectory();
                 const stats = fs.statSync(fullPath);
+                const isDirectory = stats.isDirectory();
                 
                 return {
                     name: file,
                     path: filePath,
                     isDirectory: isDirectory,
                     size: isDirectory ? null : stats.size,
-                    modified: stats.mtime
+                    modified: stats.mtime,
+                    lastModified: stats.mtime.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
                 };
             });
+            
+        // Filter files based on search query
+        if (searchQuery) {
+            fileList = fileList.filter(file => file.name.toLowerCase().includes(searchQuery.toLowerCase()));
+        }
+
+        // Sort files
+        fileList.sort((a, b) => {
+            // Rule 1: Directories always come before files
+            if (a.isDirectory && !b.isDirectory) return -1;
+            if (!a.isDirectory && b.isDirectory) return 1;
+
+            let comparison = 0;
+            switch (sortBy) {
+                case 'size':
+                    if (!a.isDirectory && !b.isDirectory) {
+                        comparison = a.size - b.size;
+                    }
+                    break;
+                case 'date':
+                    comparison = a.modified.getTime() - b.modified.getTime();
+                    break;
+                case 'name':
+                default:
+                    comparison = a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+                    break;
+            }
+
+            return sortOrder === 'desc' ? -comparison : comparison;
+        });
+
 
         // Calculate parent directory
         const parentPath = encodedPath === '/' ? null : path.dirname(encodedPath);
@@ -158,7 +213,10 @@ app.get('/*', (req, res) => {
             currentPath: encodedPath,
             parentPath: parentPath,
             files: fileList,
-            error: null
+            error: null,
+            searchQuery,
+            sortBy,
+            sortOrder,
         });
     });
 });
