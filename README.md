@@ -34,7 +34,7 @@ A modern, responsive file sharing application built with Express.js, EJS templat
 
 3. **Custom Directory (Optional)**
    ```bash
-   node app.js /path/to/your/shared/folder
+   node app.js /path/to/your/shared/folder port_number
    ```
 
 4. **Access the App**

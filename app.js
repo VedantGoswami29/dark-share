@@ -7,7 +7,7 @@ const multer = require('multer');
 const qr = require('qrcode');
 const app = express();
 const activeUsers = new Set();
-const PORT = 8000;
+const PORT = process.argv[3] || 8000;
 
 // Performance optimizations for high-speed networks
 app.use((req, res, next) => {
