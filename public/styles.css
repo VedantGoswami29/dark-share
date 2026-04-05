@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Upload area */
+.file-upload-area {
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.file-upload-area:hover { border-color: #3b82f6; background-color: #eff6ff; }
+.file-upload-area.drag-over { border-color: #2563eb; background-color: #dbeafe; }
+
+/* Progress bar */
+#progress-bar { transition: width 0.2s ease-out; }
+
+/* File list performance */
+.file-list { contain: layout style; transform: translateZ(0); }
+.file-item { contain: layout style paint; transition: box-shadow 0.15s ease; }
+.file-item:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Accessibility */
+.focus-ring:focus { outline: 2px solid #3b82f6; outline-offset: 2px; }
+
+/* Search highlight */
+.search-highlight { background-color: #fef3c7; padding: 0 2px; border-radius: 2px; }
+
+/* Spinner override */
+.animate-spin { animation-duration: 1s !important; }
+
+/* Lazy images */
+img[loading="lazy"] { opacity: 0; transition: opacity 0.15s ease; }
+img[loading="lazy"].loaded { opacity: 1; }
